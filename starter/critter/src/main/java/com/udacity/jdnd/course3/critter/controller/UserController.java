@@ -1,8 +1,15 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.controller;
 
+import com.udacity.jdnd.course3.critter.entity.Customer;
+import com.udacity.jdnd.course3.critter.service.CustomerService;
+import com.udacity.jdnd.course3.critter.user.CustomerDTO;
+import com.udacity.jdnd.course3.critter.user.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.user.EmployeeRequestDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -16,14 +23,30 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
-    @PostMapping("/customer")
+    @Autowired
+    CustomerService customerService;
+
+    @PostMapping("/")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        throw new UnsupportedOperationException();
+        Customer customer = customerService.convertDtoToCustomer(customerDTO);
+        Customer savedCustomer = customerService.saveCustomer(customer);
+
+        CustomerDTO savedCustomerDTO = customerService.convertCustomerToDto(savedCustomer);
+
+        return savedCustomerDTO;
     }
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        throw new UnsupportedOperationException();
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
+        for (Customer customer : customerService.getAllCustomer()){
+            customerDTOList.add(customerService.convertCustomerToDto(customer));
+        }
+        CustomerDTO customerDto = new CustomerDTO();
+        customerDto.setId(1L);
+        customerDto.setName("Test");
+        customerDTOList.add(customerDto);
+        return customerDTOList;
     }
 
     @GetMapping("/customer/pet/{petId}")
