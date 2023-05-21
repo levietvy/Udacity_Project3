@@ -8,8 +8,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
 @Data
 public class Customer {
     @Id
@@ -19,13 +17,8 @@ public class Customer {
     private String name;
 
     private String phoneNumber;
-
-    private String note;
+    private String notes;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Pet> pets;
-
-    public Customer(){
-
-    }
 }

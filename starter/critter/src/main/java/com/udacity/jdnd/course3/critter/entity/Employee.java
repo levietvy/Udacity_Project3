@@ -1,27 +1,28 @@
 package com.udacity.jdnd.course3.critter.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.udacity.jdnd.course3.critter.Enum.EmployeeSkill;
+import lombok.Data;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
+import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@Table(name = "employees")
+@Data
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id")
-    private Long employeeId;
+    private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "phone")
-    private String phone;
+    @ElementCollection
+    @JoinTable(name = "employee_skill")
+    private Set<EmployeeSkill> skills;
 
-    @Column(name = "email")
-    private String email;
+    @ElementCollection
+    @JoinTable(name = "employee_days_available")
+    private Set<DayOfWeek> daysAvailable;
 }

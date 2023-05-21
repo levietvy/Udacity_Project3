@@ -1,29 +1,35 @@
 package com.udacity.jdnd.course3.critter.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.udacity.jdnd.course3.critter.Enum.EmployeeSkill;
+import lombok.Data;
 
 import javax.persistence.*;
+
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@Table(name = "schedules")
+@Data
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "schedule_id")
-    private Long scheduleId;
+    private Long id;
 
-    @Column(name = "date")
     private LocalDate date;
+    @ManyToMany
+    @JoinTable(
+            name = "schedule_employee",
+            inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    private List<Employee> employees;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @ManyToMany
+    @JoinTable(
+            name = "schedule_pet",
+            inverseJoinColumns = @JoinColumn(name = "pet_id"))
+    private List<Pet> petList;
 
-    @ManyToOne
-    @JoinColumn(name = "pet_id")
-    private Pet pet;
+    @ElementCollection
+    @JoinTable(name = "schedule_skill")
+    private Set<EmployeeSkill> setEmployeeSkill;
 }

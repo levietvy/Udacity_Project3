@@ -1,5 +1,6 @@
-package com.udacity.jdnd.course3.critter.pet;
+package com.udacity.jdnd.course3.critter.dto;
 
+import com.udacity.jdnd.course3.critter.Enum.PetType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
