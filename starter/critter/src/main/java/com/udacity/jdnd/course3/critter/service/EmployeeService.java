@@ -27,7 +27,15 @@ public class EmployeeService {
     }
 
     public Employee getEmployeeById(Long id){
-        return employeeRepository.getOne(id);
+        return employeeRepository.getById(id);
+    }
+
+    public List<Employee> getEmployeesByIDs(List<Long> ids){
+        List<Employee> employeeList = new ArrayList<>();
+        for (long id : ids){
+            employeeList.add(employeeRepository.getById(id));
+        }
+        return employeeList;
     }
 
     public List<EmployeeDTO> findEmployeeForService(EmployeeRequestDTO employeeRequestDTO){

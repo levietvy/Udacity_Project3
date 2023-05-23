@@ -25,7 +25,7 @@ public class PetService {
     CustomerRepository customerRepository;
 
     public PetDTO savePet(PetDTO petDTO) {
-        Customer customer = customerRepository.getOne(petDTO.getOwnerId());
+        Customer customer = customerRepository.getById(petDTO.getOwnerId());
         Pet pet = convertDtoToEntity(petDTO);
         pet.setCustomer(customer);
         Pet savedPet = petRepository.save(pet);
@@ -39,7 +39,7 @@ public class PetService {
     }
 
     public Pet getPetById(Long id){
-        Pet pet = petRepository.getOne(id);
+        Pet pet = petRepository.getById(id);
         return pet;
     }
 
@@ -50,6 +50,14 @@ public class PetService {
             petDTOList.add(convertEntityToDto(pet));
         }
         return petDTOList;
+    }
+
+    public List<Pet> getPetsByIds(List<Long> ids){
+        List<Pet> petList = new ArrayList<>();
+        for (Long id : ids){
+            petList.add(petRepository.getById(id));
+        }
+        return petList;
     }
 
     public List<PetDTO> getPetsByCustomerId(Long customerId){
@@ -63,13 +71,26 @@ public class PetService {
 
     public Pet convertDtoToEntity(PetDTO petDTO){
         Pet pet = new Pet();
-        BeanUtils.copyProperties(petDTO, pet);
+
+        BeanUtils.copyProperties(petDTO, pet, "ownerId", "type");
+
+        //Adds the customer to the Pet instance
+        Customer customer = customerRepository.getById(petDTO.getOwnerId());
+        pet.setCustomer(customer);
+        pet.setPetType(petDTO.getType());
+
         return pet;
     }
 
     public PetDTO convertEntityToDto(Pet pet){
         PetDTO petDTO = new PetDTO();
-        BeanUtils.copyProperties(pet,petDTO);
+
+        BeanUtils.copyProperties(pet, petDTO, "customer", "petType");
+
+        Customer customer = customerRepository.getById(pet.getCustomer().getId());
+        petDTO.setOwnerId(customer.getId());
+        petDTO.setType(pet.getPetType());
+
         return petDTO;
     }
 }

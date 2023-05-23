@@ -8,6 +8,7 @@ import com.udacity.jdnd.course3.critter.controller.PetController;
 import com.udacity.jdnd.course3.critter.dto.*;
 import com.udacity.jdnd.course3.critter.Enum.PetType;
 import com.udacity.jdnd.course3.critter.controller.ScheduleController;
+import com.udacity.jdnd.course3.critter.entity.Employee;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,6 @@ public class CritterFunctionalTest {
     private ScheduleController scheduleController;
 
     @Test
-    @Order(1)
     public void testCreateCustomer(){
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
@@ -55,7 +55,6 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    @Order(2)
     public void testCreateEmployee(){
         EmployeeDTO employeeDTO = createEmployeeDTO();
         EmployeeDTO newEmployee = userController.saveEmployee(employeeDTO);
@@ -66,7 +65,6 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    @Order(3)
     public void testAddPetsToCustomer() {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
@@ -92,7 +90,6 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    @Order(4)
     public void testFindPetsByOwner() {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
@@ -209,7 +206,7 @@ public class CritterFunctionalTest {
         sched3.setPetIds(sched2.getPetIds());
         sched3.setActivities(Sets.newHashSet(EmployeeSkill.SHAVING, EmployeeSkill.PETTING));
         sched3.setDate(LocalDate.of(2020, 3, 23));
-        scheduleController.createSchedule(sched3);
+        ScheduleDTO scheduleDTO =  scheduleController.createSchedule(sched3);
 
         /*
             We now have 3 schedule entries. The third schedule entry has the same employees as the 1st schedule
@@ -288,7 +285,8 @@ public class CritterFunctionalTest {
                 .map(e -> {
                     e.setSkills(activities);
                     e.setDaysAvailable(Sets.newHashSet(date.getDayOfWeek()));
-                    return userController.saveEmployee(e).getId();
+                    EmployeeDTO tempEmployee = userController.saveEmployee(e);
+                    return tempEmployee.getId();
                 }).collect(Collectors.toList());
         CustomerDTO cust = userController.saveCustomer(createCustomerDTO());
         List<Long> petIds = IntStream.range(0, numPets)

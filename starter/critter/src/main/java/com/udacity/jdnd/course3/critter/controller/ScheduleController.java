@@ -30,7 +30,7 @@ public class ScheduleController {
 
     @GetMapping
     public List<ScheduleDTO> getAllSchedules() {
-        throw new UnsupportedOperationException();
+        return scheduleService.getAllSchedule();
     }
 
     @GetMapping("/pet/{petId}")

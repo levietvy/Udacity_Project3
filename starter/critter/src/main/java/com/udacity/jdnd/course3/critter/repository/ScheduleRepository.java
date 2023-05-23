@@ -11,9 +11,9 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    @Query(value = "select s from Schedule s where :petId MEMBER OF s.petList")
+    @Query(value = "select s from Schedule s inner join s.petList petList WHERE petList.id = :petId")
     List<Schedule> getSchedulesByPetId(@Param("petId")Long petId);
 
-    @Query(value = "select s from Schedule s where :employeeId MEMBER OF s.employees")
-    List<Schedule> getSchedulesByEmployeeId(@Param("employeeId")Long employeeId);
+    @Query("select s from Schedule s inner join s.employees se where se.id = :employeeID")
+    List<Schedule> getSchedulesByEmployeeId(@Param("employeeID") Long employeeID);
 }
