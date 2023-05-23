@@ -36,7 +36,8 @@ public class UserController {
 
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        return customerService.saveCustomer(customerDTO);
+        CustomerDTO tempCustomerDTO = customerService.saveCustomer(customerDTO);
+        return tempCustomerDTO;
     }
 
     @GetMapping("/customer")
@@ -51,7 +52,7 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
         Pet pet = petService.getPetById(petId);
-        Customer customer = customerService.getCustomerById(pet.getCustomer().getCustomerId());
+        Customer customer = customerService.getCustomerById(pet.getCustomer().getId());
         return customerService.convertEntityToDto(customer);
     }
 

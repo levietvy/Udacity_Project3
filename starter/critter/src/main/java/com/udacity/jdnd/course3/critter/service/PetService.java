@@ -9,11 +9,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PetService {
 
     @Autowired
@@ -26,7 +28,14 @@ public class PetService {
         Customer customer = customerRepository.getOne(petDTO.getOwnerId());
         Pet pet = convertDtoToEntity(petDTO);
         pet.setCustomer(customer);
-        return convertEntityToDto(petRepository.save(pet));
+        Pet savedPet = petRepository.save(pet);
+        if (customer.getPets() == null) {
+            List<Pet> petList = new ArrayList<>();
+            customer.setPets(petList);
+        }
+        customer.getPets().add(savedPet);
+        customerRepository.save(customer);
+        return convertEntityToDto(savedPet);
     }
 
     public Pet getPetById(Long id){

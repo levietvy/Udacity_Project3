@@ -8,12 +8,15 @@ import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@Service
+@Transactional
 public class EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
